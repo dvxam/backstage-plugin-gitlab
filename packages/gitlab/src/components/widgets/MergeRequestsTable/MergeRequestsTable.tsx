@@ -5,7 +5,7 @@ import { useAsync } from 'react-use';
 import {
     gitlabInstance,
     gitlabProjectId,
-    gitlabProjectSlug,
+    gitlabUserId,
 } from '../../gitlabAppData';
 import { GitlabCIApiRef } from '../../../api';
 import { useApi } from '@backstage/core-plugin-api';
@@ -58,7 +58,7 @@ export const MergeRequestDenseTable = ({
 
 export const MergeRequestsTable = ({}) => {
     const project_id = gitlabProjectId();
-    const project_slug = gitlabProjectSlug();
+    const user_id = gitlabUserId();
     const gitlab_instance = gitlabInstance();
 
     const GitlabCIAPI = useApi(GitlabCIApiRef).build(
@@ -69,20 +69,13 @@ export const MergeRequestsTable = ({}) => {
         data: MergeRequestSchema[];
         projectName: string;
     }> => {
-        const projectDetails = await GitlabCIAPI.getProjectDetails(
-            project_slug || project_id
-        );
-
-        if (!projectDetails)
-            throw new Error('wrong project_slug or project_id');
-
-        const summary = await GitlabCIAPI.getMergeRequestsSummary(
-            projectDetails.id
-        );
+        const summary = user_id
+            ? await GitlabCIAPI.getUserMergeRequestsSummary(user_id)
+            : await GitlabCIAPI.getMergeRequestsSummary(project_id);
 
         if (!summary) throw new Error('Merge request summary is undefined!');
 
-        return { data: summary, projectName: projectDetails.name };
+        return { data: summary, projectName: 'Project' };
     }, []);
 
     if (loading) {

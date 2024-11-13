@@ -24,6 +24,7 @@ import {
 } from '@backstage/catalog-model';
 
 export const GITLAB_ANNOTATION_PROJECT_ID = 'gitlab.com/project-id';
+export const GITLAB_ANNOTATION_USER_ID = 'gitlab.com/user-id';
 export const GITLAB_ANNOTATION_PROJECT_SLUG = 'gitlab.com/project-slug';
 export const GITLAB_ANNOTATION_INSTANCE = 'gitlab.com/instance';
 export const GITLAB_ANNOTATION_CODEOWNERS_PATH = 'gitlab.com/codeowners-path';
@@ -56,6 +57,15 @@ export const useEntityGitlabScmIntegration = () => {
         };
     }
     return defaultGitlabIntegration;
+};
+
+export const gitlabUserId = () => {
+    const { entity } = useEntity();
+
+    const project_id =
+        entity.metadata.annotations?.[GITLAB_ANNOTATION_USER_ID] ?? '';
+
+    return project_id;
 };
 
 export const gitlabProjectId = () => {

@@ -51,6 +51,9 @@ export type GitlabCIApi = {
     getMergeRequestsSummary(
         projectID: string | number
     ): Promise<MergeRequestSchema[] | undefined>;
+    getUserMergeRequestsSummary(
+        username: string
+    ): Promise<MergeRequestSchema[] | undefined>;
     getMergeRequestsStatusSummary(
         projectID: string | number,
         count: number

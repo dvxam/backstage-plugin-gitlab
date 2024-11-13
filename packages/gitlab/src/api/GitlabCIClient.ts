@@ -243,6 +243,16 @@ export class GitlabCIClient implements GitlabCIApi {
         return groupDetail;
     }
 
+    async getUserMergeRequestsSummary(
+        userID?: string
+    ): Promise<MergeRequestSchema[] | undefined> {
+        if (!userID) return;
+        return this.callApi<MergeRequestSchema[]>(
+            'merge_requests?author_username=maxime.deveaux1',
+            {}
+        );
+    }
+
     async getMergeRequestsSummary(
         projectID?: string | number
     ): Promise<MergeRequestSchema[] | undefined> {
